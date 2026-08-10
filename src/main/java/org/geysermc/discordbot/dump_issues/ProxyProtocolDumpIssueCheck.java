@@ -46,7 +46,7 @@ public class ProxyProtocolDumpIssueCheck extends AbstractDumpIssueCheck {
             warnings.add("- `advanced.bedrock.use-haproxy-protocol` should ONLY be enabled if you run a reverse UDP proxy in front of Geyser that supports HAPROXY protocol, or if you are using a playit.gg tunnel with Proxy Protocol enabled.");
         }
         if (configJava.getBoolean("use-haproxy-protocol")) {
-            warnings.add("- `advanced.java.use-haproxy-protocol` should ONLY be enabled if either of these apply:\n\u00A0\u00A0\u00A0\u00A01. Your server supports HAPROXY protocol (this has nothing to do with if you're using BungeeCord or Velocity).\n\u00A0\u00A0\u00A0\u00A02. You have the exact same option enabled in your BungeeCord/Velocity config (it is off by default).\n\u00A0\u00A0\u00A0\u00A03. You are using a playit.gg tunnel with Proxy Protocol enabled.");
+            warnings.add("- `advanced.java.use-haproxy-protocol` should ONLY be enabled if either of these apply:\n\u00A0\u00A0\u00A0\u00A01. Your server supports HAPROXY protocol (this has nothing to do with if you're using BungeeCord or Velocity).\n\u00A0\u00A0\u00A0\u00A02. You have the exact same option enabled in your BungeeCord/Velocity config (it is off by default).");
         }
 
         return warnings;
