@@ -1,5 +1,6 @@
 # Tags
 This directory contains the tags that the bot will use. `.tag` files contain the tag data, they are Discord Markdown files with a little header for settings.
+Tags in every subdirectory are loaded automatically. The `errors` and `nethernet` directories provide error responses that are also used when analyzing logs and OCR text from images.
 
 ## Format
 All tags follow this format:
