@@ -198,8 +198,10 @@ public class ForumPostCommand extends SlashCommand {
 
             ThreadChannel thread = event.getChannel().asThreadChannel();
             Member member = event.getMember();
-            if (member == null || !(thread.getOwnerIdLong() == member.getIdLong() || ServerSettings.hasPostCloseRole(member))) {
-                event.reply("Only the post owner or members with a configured role can close this post").setEphemeral(true).queue();
+            if (member == null || !(thread.getOwnerIdLong() == member.getIdLong()
+                    || ServerSettings.hasPostCloseRole(member)
+                    || member.hasPermission(Permission.MANAGE_THREADS))) {
+                event.reply("Only the post owner, members with a configured role, or members with Manage Threads permission can close this post").setEphemeral(true).queue();
                 return;
             }
 
