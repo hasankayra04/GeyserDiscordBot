@@ -25,20 +25,20 @@
 
 package org.geysermc.discordbot.listeners;
 
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.ForumChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
 import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.geysermc.discordbot.storage.ServerSettings;
-import org.geysermc.discordbot.util.BotColors;
+import org.geysermc.discordbot.tags.SlashTag;
+import org.geysermc.discordbot.tags.TagsManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
 /**
- * Sends a configurable help message in every new support forum post
+ * Sends a configured tag in every new support forum post
  */
 public class SupportPostHandler extends ListenerAdapter {
     @Override
@@ -52,13 +52,15 @@ public class SupportPostHandler extends ListenerAdapter {
         // Posts created by the bot (e.g. via /post create) don't need the help message
         if (thread.getOwnerIdLong() == event.getJDA().getSelfUser().getIdLong()) return;
 
-        String message = ServerSettings.getSupportPostMessage(event.getGuild());
-        if (message.isEmpty()) return;
+        String tagName = ServerSettings.getSupportPostTag(event.getGuild());
+        if (tagName == null) return;
+
+        SlashTag tag = TagsManager.getEmbedTags().stream()
+                .filter(t -> t.getName().equalsIgnoreCase(tagName))
+                .findFirst().orElse(null);
+        if (tag == null) return;
 
         // Delay so the message appears after the user's first message
-        thread.sendMessageEmbeds(new EmbedBuilder()
-                .setDescription(message)
-                .setColor(BotColors.SUCCESS.getColor())
-                .build()).queueAfter(2, TimeUnit.SECONDS, null, error -> {});
+        tag.sendToChannel(thread).queueAfter(2, TimeUnit.SECONDS, null, error -> {});
     }
 }

@@ -201,7 +201,7 @@ public class ForumPostCommand extends SlashCommand {
             if (member == null || !(thread.getOwnerIdLong() == member.getIdLong()
                     || ServerSettings.hasPostCloseRole(member)
                     || member.hasPermission(Permission.MANAGE_THREADS))) {
-                event.reply("Only the post owner, members with a configured role, or members with Manage Threads permission can close this post").setEphemeral(true).queue();
+                event.reply("Only the post owner, members with an allowed role, or members with Manage Threads permission can close this post").setEphemeral(true).queue();
                 return;
             }
 

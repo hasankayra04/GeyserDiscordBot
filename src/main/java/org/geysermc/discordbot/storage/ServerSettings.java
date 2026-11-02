@@ -304,46 +304,37 @@ public class ServerSettings {
         return guild.getTextChannelById(channel);
     }
 
-    public static final String DEFAULT_SUPPORT_POST_MESSAGE = """
-            Thanks for opening a support post! To help us help you, please include:
-            - A Geyser dump: Run !!dump to learn how to generate one.
-            - A description of the issue: What did you expect to happen, and what actually happened?
-
-            Once your issue is resolved, you can close this post with `/post close`.""";
-
-    public static final List<String> DEFAULT_POST_CLOSE_ROLES = List.of(
-            "helpful", "contributor", "collaborator", "triage", "moderator", "advisor", "developer", "project lead");
-
     /**
-     * Get the message sent in new support posts. Empty if disabled (set to `off`).
+     * Get the name of the tag sent in new support posts. Null if not set (feature disabled).
      */
-    @NotNull
-    public static String getSupportPostMessage(@NotNull Guild guild) {
-        String message = GeyserBot.storageManager.getServerPreference(guild.getIdLong(), "support-post-message");
-        if (message == null || message.isBlank()) {
-            return DEFAULT_SUPPORT_POST_MESSAGE;
-        }
-        if (message.equalsIgnoreCase("off")) {
-            return "";
-        }
-        return message.replace("\\n", "\n");
+    @Nullable
+    public static String getSupportPostTag(@NotNull Guild guild) {
+        String tag = GeyserBot.storageManager.getServerPreference(guild.getIdLong(), "support-post-tag");
+        return tag == null || tag.isBlank() ? null : tag.trim();
     }
 
     /**
-     * Get the roles (names or IDs) that may close any forum post
+     * Get the roles (names or IDs) that may close any forum post. Empty if not set.
+     * <p>
+     * To restore the old hardcoded roles, run for each one (e.g. helpful, contributor, collaborator,
+     * triage, moderator, advisor, developer, project lead):
+     * {@code /settings action:add key:post-close-roles value:<role name>}
      */
     @NotNull
     public static List<String> getPostCloseRoles(@NotNull Guild guild) {
         List<String> roles = getList(guild.getIdLong(), "post-close-roles");
         roles.removeIf(String::isBlank);
-        return roles.isEmpty() ? DEFAULT_POST_CLOSE_ROLES : roles;
+        return roles;
     }
 
     /**
-     * Check if the member has one of the roles allowed to close forum posts
+     * Check if the member may close any forum post. Everyone may if no roles are configured.
      */
     public static boolean hasPostCloseRole(@NotNull Member member) {
         List<String> allowed = getPostCloseRoles(member.getGuild());
+        if (allowed.isEmpty()) {
+            return true;
+        }
         return member.getRoles().stream().anyMatch(role -> allowed.stream()
                 .anyMatch(entry -> entry.trim().equalsIgnoreCase(role.getName()) || entry.trim().equals(role.getId())));
     }
