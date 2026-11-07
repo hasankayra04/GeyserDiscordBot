@@ -25,21 +25,24 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
 
       - name: Detect Upstream and Pull
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Fetch repository details from GitHub API unauthenticated
+          # Fetch repository details from GitHub API using the token to avoid rate limits
           REPO_API_URL="https://api.github.com/repos/${{ github.repository }}"
-          API_RESPONSE=$(curl -s "$REPO_API_URL")
+          API_RESPONSE=$(curl -s -H "Authorization: token $GH_PAT" "$REPO_API_URL")
           
           # Extract upstream parent/source clone URL
           UPSTREAM_URL=$(echo "$API_RESPONSE" | jq -r '.source.clone_url // .parent.clone_url // empty')
 
           if [ -z "$UPSTREAM_URL" ]; then
-            echo "::warning:: Fork metadata not found or rate-limited. API Response snippet:"
+            echo "::warning:: Fork metadata not found or unavailable. API Response snippet:"
             echo "$API_RESPONSE" | jq '{message: .message, fork: .fork, parent: .parent.full_name}' || echo "$API_RESPONSE"
             echo "This repository is not a fork or no upstream source was found. Skipping upstream sync."
             exit 0
