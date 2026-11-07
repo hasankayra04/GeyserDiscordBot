@@ -92,7 +92,7 @@ jobs:
             GL_NAMESPACE="$GH_OWNER"
           fi
 
-          echo "Targeting GitLab namespace: $GL_NAMESPACE / $REPO_NAME"
+          echo "Targeting GitLab namespace: https://gitlab.com/$GL_NAMESPACE/$REPO_NAME"
 
           git remote add gitlab "https://oauth2:${GITLAB_PAT}@gitlab.com/${GL_NAMESPACE}/${REPO_NAME}.git"
           git push gitlab --all --force
@@ -129,7 +129,7 @@ jobs:
           # Codeberg keeps the exact original GitHub owner name (no changes)
           CB_NAMESPACE="$GH_OWNER"
 
-          echo "Targeting Codeberg namespace: $CB_NAMESPACE / $REPO_NAME"
+          echo "Targeting Codeberg namespace: https://codeberg.org/$CB_NAMESPACE/$REPO_NAME"
 
           git remote add codeberg "https://${CODEBERG_PAT}@codeberg.org/${CB_NAMESPACE}/${REPO_NAME}.git"
           git push codeberg --all --force
