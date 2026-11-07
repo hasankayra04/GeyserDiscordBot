@@ -94,13 +94,15 @@ public class MySQLStorageManager extends AbstractStorageManager {
     @Override
     public void setServerPreference(long serverID, String preference, String value) {
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO preferences (server, key, value) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)")) {
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `preferences` (`server`, `key`, `value`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)")) {
                 statement.setLong(1, serverID);
                 statement.setString(2, preference);
                 statement.setString(3, value);
                 statement.executeUpdate();
             }
-        } catch (SQLException ignored) {}
+        } catch (SQLException e) {
+            throw new IllegalStateException("Failed to save server preference", e);
+        }
     }
 
     @Override

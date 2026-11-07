@@ -33,6 +33,7 @@ Most of these are lists which values are seperated by `,` and a few are seperate
 | `rss-feeds`             | Channel IDs to log RSS posts to along with the RSS feed url                          | `916482484122824704\|https://blog.geysermc.org/feed.xml`    |
 | `allowed-invites`       | Guild IDs for allowed invites                                                        | `613163671870242838,393465748535640064`                     |
 | `forum-channel`         | Channel ID for forum management                                                      | `645877230811709456`                                        |
+| `forum-auto-reply-tag`  | Name of an existing embed tag to send automatically in new forum posts               | `help`                                                      |
 | `preview-feeds-channel` | News channel ID for preview feeds                                                    | `614877230811709474`                                        |
 | `preview-feeds`         | Forum channel ID for preview feeds                                                   | `614877230811709474`                                        |
 | `exploit-reports-notify-channel` | Channel ID to notify when an exploit report is made                         | `614877230811709474`                                        |
