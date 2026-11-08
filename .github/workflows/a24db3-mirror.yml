@@ -56,7 +56,7 @@ jobs:
           CURRENT_BRANCH="${GITHUB_REF#refs/heads/}"
           
           # Explicit merge with -X theirs strategy accepting incoming changes
-          git merge "upstream/$CURRENT_BRANCH" --allow-unrelated-histories -X theirs --no-edit -m "Automated upstream sync (prefer upstream)"
+          git merge "upstream/$CURRENT_BRANCH" --allow-unrelated-histories -X theirs --no-edit -m "Automated upstream sync (prefer upstream) [skip ci]"
           
           git push origin "$CURRENT_BRANCH" --tags
 
